@@ -48,61 +48,61 @@ def main():
 	valid_X, valid_y = prepare_data(raw_valid)
 
 	# Visualize training data.
-	visualize_features(train_X[:, 1:3], train_y)
+	# visualize_features(train_X[:, 1:3], train_y)
 
-	# ------------Perceptron------------
-	perceptron_models = []
-	for max_iter in [10, 20, 50, 100, 200]:
-		# Initialize the model.
-		perceptron_classifier = perceptron(max_iter=max_iter)
-		perceptron_models.append(perceptron_classifier)
+	# # ------------Perceptron------------
+	# perceptron_models = []
+	# for max_iter in [10, 20, 50, 100, 200]:
+	# 	# Initialize the model.
+	# 	perceptron_classifier = perceptron(max_iter=max_iter)
+	# 	perceptron_models.append(perceptron_classifier)
 
-		# Train the model.
-		perceptron_classifier.fit(train_X, train_y)
+	# 	# Train the model.
+	# 	perceptron_classifier.fit(train_X, train_y)
 		
-		print('Max interation:', max_iter)
-		print('Weights after training:',perceptron_classifier.get_params())
-		print('Training accuracy:', perceptron_classifier.score(train_X, train_y))
-		print('Validation accuracy:', perceptron_classifier.score(valid_X, valid_y))
-		print()
+	# 	print('Max interation:', max_iter)
+	# 	print('Weights after training:',perceptron_classifier.get_params())
+	# 	print('Training accuracy:', perceptron_classifier.score(train_X, train_y))
+	# 	print('Validation accuracy:', perceptron_classifier.score(valid_X, valid_y))
+	# 	print()
 
-	# Visualize the the 'best' one of the five models above after training.
-	# visualize_result(train_X[:, 1:3], train_y, best_perceptron.get_params())
-	### YOUR CODE HERE
+	# # Visualize the the 'best' one of the five models above after training.
+	# # visualize_result(train_X[:, 1:3], train_y, best_perceptron.get_params())
+	# ### YOUR CODE HERE
 
-	### END YOUR CODE
+	# ### END YOUR CODE
 	
-	# Use the 'best' model above to do testing.
-	### YOUR CODE HERE
+	# # Use the 'best' model above to do testing.
+	# ### YOUR CODE HERE
 
-	### END YOUR CODE
+	# ### END YOUR CODE
 
 
-	# ------------Logistic Regression------------
+	# # ------------Logistic Regression------------
 
-	# Check GD, SGD, BGD
-	logisticR_classifier = logistic_regression(learning_rate=0.5, max_iter=100)
+	# # Check GD, SGD, BGD
+	# logisticR_classifier = logistic_regression(learning_rate=0.5, max_iter=100)
 
-	logisticR_classifier.fit_GD(train_X, train_y)
-	print(logisticR_classifier.get_params())
-	print(logisticR_classifier.score(train_X, train_y))
+	# logisticR_classifier.fit_GD(train_X, train_y)
+	# print(logisticR_classifier.get_params())
+	# print(logisticR_classifier.score(train_X, train_y))
 
-	logisticR_classifier.fit_BGD(train_X, train_y, 1000)
-	print(logisticR_classifier.get_params())
-	print(logisticR_classifier.score(train_X, train_y))
+	# logisticR_classifier.fit_BGD(train_X, train_y, 1000)
+	# print(logisticR_classifier.get_params())
+	# print(logisticR_classifier.score(train_X, train_y))
 
-	logisticR_classifier.fit_SGD(train_X, train_y)
-	print(logisticR_classifier.get_params())
-	print(logisticR_classifier.score(train_X, train_y))
+	# logisticR_classifier.fit_SGD(train_X, train_y)
+	# print(logisticR_classifier.get_params())
+	# print(logisticR_classifier.score(train_X, train_y))
 
-	logisticR_classifier.fit_BGD(train_X, train_y, 1)
-	print(logisticR_classifier.get_params())
-	print(logisticR_classifier.score(train_X, train_y))
+	# logisticR_classifier.fit_BGD(train_X, train_y, 1)
+	# print(logisticR_classifier.get_params())
+	# print(logisticR_classifier.score(train_X, train_y))
 
-	logisticR_classifier.fit_BGD(train_X, train_y, 10)
-	print(logisticR_classifier.get_params())
-	print(logisticR_classifier.score(train_X, train_y))
-	print()
+	# logisticR_classifier.fit_BGD(train_X, train_y, 10)
+	# print(logisticR_classifier.get_params())
+	# print(logisticR_classifier.score(train_X, train_y))
+	# print()
 
 	# Explore different hyper-parameters.
 	### YOUR CODE HERE
