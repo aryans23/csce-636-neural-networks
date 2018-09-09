@@ -70,10 +70,12 @@ def prepare_X(raw_X):
 	# Stack features together in the following order.
 	# [Feature 3, Feature 1, Feature 2]
 	### YOUR CODE HERE
+
 	X = np.stack([feature_3, feature_2, feature_1], axis=1)
 	print("** X: ")
 	print(X.view())
 	print("** X ends")
+
 	### END YOUR CODE
 
 	return X
@@ -93,7 +95,10 @@ def prepare_y(raw_y):
 	"""
 	### YOUR CODE HERE
 
-	y = np.zeros(raw_y.shape[0])
+	raw_y = raw_y.astype(int)
+	print("raw_y = " + str(raw_y[:10]))
+	y = np.array([1 if x==1 else 5 for x in raw_y])
+	print("y = " + str(y[:10]))
 
 	### END YOUR CODE
 
@@ -111,9 +116,6 @@ def prepare_data(raw_data):
 	"""
 	raw_X = raw_data[:, 1:]
 	raw_y = raw_data[:, 0]
-
-	print("raw_X shape = " + str(raw_X.shape))
-	print("raw_y shape = " + str(raw_y.shape))
 
 	assert len(raw_X.shape) == 2
 	assert raw_X.shape[0] == raw_y.shape[0]
