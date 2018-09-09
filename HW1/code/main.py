@@ -21,6 +21,11 @@ def visualize_features(X, y):
 	'''
 	### YOUR CODE HERE
 
+	colors = np.random.rand(X.shape[0])
+	plt.scatter(X[:,0], X[:,1], c=colors)
+	plt.show()
+	# plt.savefig('train_features.png')
+
 	### END YOUR CODE
 
 def visualize_result(X, y, W):
@@ -48,7 +53,7 @@ def main():
 	valid_X, valid_y = prepare_data(raw_valid)
 
 	# Visualize training data.
-	# visualize_features(train_X[:, 1:3], train_y)
+	visualize_features(train_X[:, 1:3], train_y)
 
 	# # ------------Perceptron------------
 	# perceptron_models = []
