@@ -20,7 +20,7 @@ class perceptron(object):
 			self: Returns an instance of self.
 		"""
 		### YOUR CODE HERE
-		
+
 		self.W = np.array([0.0 for i in range(X.shape[1])])
 		predicted = np.zeros(y.shape[0])
 		self.errors = []
@@ -62,8 +62,7 @@ class perceptron(object):
 		preds = np.ndarray(X.shape[0])
 		for i in np.arange(X.shape[0]):
 			act = np.sum(np.dot(X[i], self.W))
-			yhat = 1 if act >= 0 else -1
-			preds[i] = yhat
+			preds[i] = 1 if act >= 0 else -1
 		return preds
 
 		### END YOUR CODE
@@ -80,8 +79,9 @@ class perceptron(object):
 		"""
 		### YOUR CODE HERE
 
-		delta = abs(self.predict(X) - y)
-		return np.sum(delta)/y.shape[0]
+		preds = self.predict(X)
+		from sklearn.metrics import accuracy_score
+		return accuracy_score(preds, y)*100
 
 		### END YOUR CODE
 
