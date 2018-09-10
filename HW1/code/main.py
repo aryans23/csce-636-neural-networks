@@ -7,6 +7,7 @@ from DataReader import *
 data_dir = "../data/"
 train_filename = "train.txt"
 test_filename = "test.txt"
+img_index = 0
 
 def visualize_features(X, y):
 	'''This function is used to plot a 2-D scatter plot of training features. 
@@ -21,6 +22,7 @@ def visualize_features(X, y):
 	'''
 	### YOUR CODE HERE
 
+	global img_index
 	ones = []
 	fives = []
 	for i in range(y.shape[0]):
@@ -33,7 +35,8 @@ def visualize_features(X, y):
 
 	plt.scatter(fives[:,0], fives[:,1], c='b')
 	plt.scatter(ones[:,0], ones[:,1], c='y')
-	plt.savefig('train_features.png')
+	plt.savefig('train_features_img' + str(img_index) + '.png')
+	img_index += 1
 
 	### END YOUR CODE
 
@@ -51,6 +54,7 @@ def visualize_result(X, y, W):
 	'''
 	### YOUR CODE HERE
 
+	global img_index
 	slope = -(W[0]/W[2])/(W[0]/W[1])
 	intercept = -W[0]/W[2]
 	boundary = []
@@ -69,13 +73,15 @@ def visualize_result(X, y, W):
 	fives = np.array(fives)
 	plt.scatter(fives[:,0], fives[:,1], c='b')
 	plt.scatter(ones[:,0], ones[:,1], c='y')
-	plt.savefig('test_features.png')
+	plt.savefig('test_features_img' + str(img_index) + '.png')
+	img_index += 1
 
 	### END YOUR CODE
 
 def main():
 	# ------------Data Preprocessing------------
 	# Read data for training.
+	global img_index
 	raw_data = load_data(os.path.join(data_dir, train_filename))
 	raw_train, raw_valid = train_valid_split(raw_data, 1000)
 	train_X, train_y = prepare_data(raw_train)
@@ -132,47 +138,80 @@ def main():
 	logisticR_classifier.fit_GD(train_X, train_y)
 	print(logisticR_classifier.get_params())
 	print(logisticR_classifier.score(train_X, train_y))
+	print()
 	# plt.plot(logisticR_classifier.errors)
 	# plt.show()
 
 	logisticR_classifier.fit_BGD(train_X, train_y, 1000)
 	print(logisticR_classifier.get_params())
 	print(logisticR_classifier.score(train_X, train_y))
+	print()
 	# plt.plot(logisticR_classifier.errors)
 	# plt.show()
 
 	logisticR_classifier.fit_SGD(train_X, train_y)
 	print(logisticR_classifier.get_params())
 	print(logisticR_classifier.score(train_X, train_y))
+	print()
 	# plt.plot(logisticR_classifier.errors)
 	# plt.show()
 
 	logisticR_classifier.fit_BGD(train_X, train_y, 1)
 	print(logisticR_classifier.get_params())
 	print(logisticR_classifier.score(train_X, train_y))
+	print()
 	# plt.plot(logisticR_classifier.errors)
 	# plt.show()
 
 	logisticR_classifier.fit_BGD(train_X, train_y, 10)
 	print(logisticR_classifier.get_params())
 	print(logisticR_classifier.score(train_X, train_y))
+	print()
 	# plt.plot(logisticR_classifier.errors)
 	# plt.show()
-	print()
 
 	# Explore different hyper-parameters.
 	## YOUR CODE HERE
 
+	errors = []
+	for learning_rate in np.linspace(0,10,num=100):
+		logisticR_classifier = logistic_regression(learning_rate, max_iter=100)
+		logisticR_classifier.fit_BGD(train_X, train_y, 10)
+		accuracy = logisticR_classifier.score(valid_X, valid_y)
+		errors.append(100-accuracy)
+	plt.plot(errors)
+	plt.savefig('variation_learning_rate_img' + str(img_index) + '.png')
+	img_index += 1
+
+	errors = []
+	for iter in range(0,1000,100):
+		logisticR_classifier = logistic_regression(learning_rate=0.5, max_iter=iter)
+		logisticR_classifier.fit_BGD(train_X, train_y, 10)
+		accuracy = logisticR_classifier.score(valid_X, valid_y)
+		errors.append(100-accuracy)
+	plt.plot(errors)
+	plt.savefig('variation_max_iters_img' + str(img_index) + '.png')
+	img_index += 1
+
+	best_logisticR = logistic_regression(learning_rate=0.5, max_iter=100)
+	best_logisticR.fit_GD(train_X, train_y)
+
 	## END YOUR CODE
 
 	# Visualize the your 'best' model after training.
-	# visualize_result(train_X[:, 1:3], train_y, best_logisticR.get_params())
 	## YOUR CODE HERE
+
+	visualize_result(train_X[:, 1:3], train_y, best_logisticR.get_params())
 
 	## END YOUR CODE
 
 	# Use the 'best' model above to do testing.
 	## YOUR CODE HERE
+
+	raw_test_data = load_data(os.path.join(data_dir, test_filename))
+	test_X, test_y = prepare_data(raw_test_data)
+	print('Testing accuracy(in %):', best_logisticR.score(test_X, test_y))
+	print()
 
 	## END YOUR CODE
 

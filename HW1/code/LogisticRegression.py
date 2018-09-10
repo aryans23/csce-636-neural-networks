@@ -153,7 +153,7 @@ class logistic_regression(object):
 		### YOUR CODE HERE
 
 		yhat = np.dot(X,self.W)
-		preds = [1 if x >= 0.5 else -1 for x in self._sigmoid(yhat)]
+		preds = [1 if x >= 0.5 else -1 for x in 1.0 / (1.0 + np.exp(-yhat))]
 		return np.array(preds)
 
 		### END YOUR CODE
