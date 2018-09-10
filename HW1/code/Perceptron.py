@@ -20,6 +20,18 @@ class perceptron(object):
 			self: Returns an instance of self.
 		"""
 		### YOUR CODE HERE
+		
+		self.W = np.array([0.0 for i in range(X.shape[1])])
+		predicted = np.zeros(y.shape[0])
+		self.errors = []
+		for it in range(self.max_iter):
+			for i in np.arange(X.shape[0]):
+				act = np.sum(np.dot(X[i], self.W))
+				yhat = 1 if act >= 0 else -1
+				predicted[i] = yhat
+				self.W = self.W + (y[i]-yhat) * X[i]
+			error = np.sum(np.array([(predicted[i]-y[i])**2 for i in range(y.shape[0])]))
+			self.errors.append(error)
 
 		### END YOUR CODE
 		
@@ -46,6 +58,13 @@ class perceptron(object):
 			preds: An array of shape [n_samples,]. Only contains 1 or -1.
 		"""
 		### YOUR CODE HERE
+		
+		preds = np.ndarray(X.shape[0])
+		for i in np.arange(X.shape[0]):
+			act = np.sum(np.dot(X[i], self.W))
+			yhat = 1 if act >= 0 else -1
+			preds[i] = yhat
+		return preds
 
 		### END YOUR CODE
 
@@ -60,6 +79,9 @@ class perceptron(object):
 			score: An float. Mean accuracy of self.predict(X) wrt. y.
 		"""
 		### YOUR CODE HERE
+
+		delta = abs(self.predict(X) - y)
+		return np.sum(delta)/y.shape[0]
 
 		### END YOUR CODE
 

@@ -21,8 +21,18 @@ def visualize_features(X, y):
 	'''
 	### YOUR CODE HERE
 
-	colors = np.random.rand(X.shape[0])
-	plt.scatter(X[:,0], X[:,1], c=colors)
+	ones = []
+	fives = []
+	for i in range(y.shape[0]):
+		if y[i]==1:
+			ones.append(X[i])
+		else:
+			fives.append(X[i])
+	ones = np.array(ones)
+	fives = np.array(fives)
+
+	plt.scatter(fives[:,0], fives[:,1], c='b')
+	plt.scatter(ones[:,0], ones[:,1], c='y')
 	plt.show()
 	# plt.savefig('train_features.png')
 
@@ -53,34 +63,34 @@ def main():
 	valid_X, valid_y = prepare_data(raw_valid)
 
 	# Visualize training data.
-	visualize_features(train_X[:, 1:3], train_y)
+	# visualize_`features(train_X[:, 1:3], train_y)
 
-	# # ------------Perceptron------------
-	# perceptron_models = []
-	# for max_iter in [10, 20, 50, 100, 200]:
-	# 	# Initialize the model.
-	# 	perceptron_classifier = perceptron(max_iter=max_iter)
-	# 	perceptron_models.append(perceptron_classifier)
+	# ------------Perceptron------------
+	perceptron_models = []
+	for max_iter in [10, 20, 50, 100, 200]:
+		# Initialize the model.
+		perceptron_classifier = perceptron(max_iter=max_iter)
+		perceptron_models.append(perceptron_classifier)
 
-	# 	# Train the model.
-	# 	perceptron_classifier.fit(train_X, train_y)
+		# Train the model.
+		perceptron_classifier.fit(train_X, train_y)
 		
-	# 	print('Max interation:', max_iter)
-	# 	print('Weights after training:',perceptron_classifier.get_params())
-	# 	print('Training accuracy:', perceptron_classifier.score(train_X, train_y))
-	# 	print('Validation accuracy:', perceptron_classifier.score(valid_X, valid_y))
-	# 	print()
+		print('Max interation:', max_iter)
+		print('Weights after training:',perceptron_classifier.get_params())
+		print('Training accuracy:', perceptron_classifier.score(train_X, train_y))
+		print('Validation accuracy:', perceptron_classifier.score(valid_X, valid_y))
+		print()
 
-	# # Visualize the the 'best' one of the five models above after training.
-	# # visualize_result(train_X[:, 1:3], train_y, best_perceptron.get_params())
-	# ### YOUR CODE HERE
+	# Visualize the the 'best' one of the five models above after training.
+	# visualize_result(train_X[:, 1:3], train_y, best_perceptron.get_params())
+	### YOUR CODE HERE
 
-	# ### END YOUR CODE
+	### END YOUR CODE
 	
-	# # Use the 'best' model above to do testing.
-	# ### YOUR CODE HERE
+	# Use the 'best' model above to do testing.
+	### YOUR CODE HERE
 
-	# ### END YOUR CODE
+	### END YOUR CODE
 
 
 	# # ------------Logistic Regression------------
@@ -110,20 +120,20 @@ def main():
 	# print()
 
 	# Explore different hyper-parameters.
-	### YOUR CODE HERE
+	# ## YOUR CODE HERE
 
-	### END YOUR CODE
+	# ## END YOUR CODE
 
 	# Visualize the your 'best' model after training.
 	# visualize_result(train_X[:, 1:3], train_y, best_logisticR.get_params())
-	### YOUR CODE HERE
+	# ## YOUR CODE HERE
 
-	### END YOUR CODE
+	# ## END YOUR CODE
 
 	# Use the 'best' model above to do testing.
-	### YOUR CODE HERE
+	# ## YOUR CODE HERE
 
-	### END YOUR CODE
+	# ## END YOUR CODE
 
 if __name__ == '__main__':
 	main()

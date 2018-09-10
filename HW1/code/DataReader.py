@@ -39,7 +39,6 @@ def prepare_X(raw_X):
 		X: An array of shape [n_samples, n_features].
 	"""
 	raw_image = raw_X.reshape((-1, 16, 16))
-	print("raw_image shape = " + str(raw_image.shape))
 
 	# Feature 1: Measure of Symmetry
 	### YOUR CODE HERE
@@ -47,7 +46,6 @@ def prepare_X(raw_X):
 	flip_X = np.fliplr(raw_image)
 	diff = np.abs(raw_image - flip_X)
 	feature_1 = -np.sum(np.sum(diff, axis=1), axis=1)/256
-	print("feature_1 shape= " + str(feature_1.shape))
 
 	### END YOUR CODE
 
@@ -55,7 +53,6 @@ def prepare_X(raw_X):
 	### YOUR CODE HERE
 
 	feature_2 = np.sum(np.sum(raw_image, axis=1), axis=1)/256
-	print("feature_2 shape= " + str(feature_2.shape))
 	
 	### END YOUR CODE
 
@@ -63,7 +60,6 @@ def prepare_X(raw_X):
 	### YOUR CODE HERE
 
 	feature_3 = np.ones(raw_X.shape[0])
-	print("feature_3 shape= " + str(feature_3.shape))
 	
 	### END YOUR CODE
 
@@ -72,9 +68,6 @@ def prepare_X(raw_X):
 	### YOUR CODE HERE
 
 	X = np.stack([feature_3, feature_2, feature_1], axis=1)
-	print("** X: ")
-	print(X.view())
-	print("** X ends")
 
 	### END YOUR CODE
 
@@ -95,10 +88,7 @@ def prepare_y(raw_y):
 	"""
 	### YOUR CODE HERE
 
-	raw_y = raw_y.astype(int)
-	print("raw_y = " + str(raw_y[:10]))
-	y = np.array([1 if x==1 else 5 for x in raw_y])
-	print("y = " + str(y[:10]))
+	y = np.array([1 if x==1.0 else -1 for x in raw_y])
 
 	### END YOUR CODE
 
