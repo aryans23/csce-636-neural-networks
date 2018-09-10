@@ -10,6 +10,9 @@ class logistic_regression(object):
 		self.learning_rate = learning_rate
 		self.max_iter = max_iter
 
+	def _sigmoid(self, z):
+		return 1.0 / (1.0 + np.exp(-z))
+
 	def fit_GD(self, X, y):
 		"""Train perceptron model on data (X,y) with GD.
 
@@ -21,6 +24,15 @@ class logistic_regression(object):
 			self: Returns an instance of self.
 		"""
 		### YOUR CODE HERE
+
+		self.W = np.zeros(X.shape[1])
+		self.errors = np.ndarray(self.max_iter)
+		for it in range(self.max_iter):
+			grads = np.zeros(X.shape[1])
+			for i in range(X.shape[0]):
+				grads += self._gradient(X[i], y[i])
+			self.W = self.W + self.learning_rate * grads
+			self.errors[it] = 100 - self.score(X,y)
 
 		### END YOUR CODE
 
@@ -39,6 +51,19 @@ class logistic_regression(object):
 		"""
 		### YOUR CODE HERE
 
+		self.W = np.zeros(X.shape[1])
+		self.errors = np.ndarray(self.max_iter)
+		for it in range(self.max_iter):
+			grads = np.zeros(X.shape[1])
+			shuf = np.c_[X,y]
+			np.random.shuffle(shuf)
+			X = shuf[:,:-1]
+			y = shuf[:,-1]
+			for i in range(batch_size):
+				grads += self._gradient(X[i], y[i])
+			self.W = self.W + self.learning_rate * grads
+			self.errors[it] = 100 - self.score(X,y)
+
 		### END YOUR CODE
 
 		return self
@@ -54,6 +79,15 @@ class logistic_regression(object):
 			self: Returns an instance of self.
 		"""
 		### YOUR CODE HERE
+
+		self.W = np.zeros(X.shape[1])
+		self.errors = np.ndarray(self.max_iter)
+		for it in range(self.max_iter):
+			grads = np.zeros(X.shape[1])
+			for i in range(X.shape[0]):
+				grads += self._gradient(X[i], y[i])
+				self.W = self.W + self.learning_rate * grads
+			self.errors[it] = 100 - self.score(X,y)
 
 		### END YOUR CODE
 		
@@ -72,6 +106,9 @@ class logistic_regression(object):
 				cross-entropy with respect to self.W.
 		"""
 		### YOUR CODE HERE
+		
+		z = np.dot(self.W.T, _x)
+		return (_y * _x)/(1 + np.exp(_y * z))
 
 		### END YOUR CODE
 
@@ -98,6 +135,10 @@ class logistic_regression(object):
 		"""
 		### YOUR CODE HERE
 
+		yhat = np.dot(X,self.W)
+		proba = np.c_[yhat, 1-yhat]
+		return proba
+
 		### END YOUR CODE
 
 	def predict(self, X):
@@ -110,6 +151,10 @@ class logistic_regression(object):
 			preds: An array of shape [n_samples,]. Only contains 1 or -1.
 		"""
 		### YOUR CODE HERE
+
+		yhat = np.dot(X,self.W)
+		preds = [1 if x >= 0.5 else -1 for x in self._sigmoid(yhat)]
+		return np.array(preds)
 
 		### END YOUR CODE
 
@@ -124,6 +169,10 @@ class logistic_regression(object):
 			score: An float. Mean accuracy of self.predict(X) wrt. y.
 		"""
 		### YOUR CODE HERE
+
+		preds = self.predict(X)
+		from sklearn.metrics import accuracy_score
+		return accuracy_score(preds, y)*100
 
 		### END YOUR CODE
 

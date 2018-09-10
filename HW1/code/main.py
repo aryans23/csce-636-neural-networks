@@ -121,50 +121,60 @@ def main():
 	print('Testing accuracy(in %):', perceptron_classifier.score(test_X, test_y))
 	print()
 
-	### END YOUR CODE
+	# ### END YOUR CODE
 
 
-	# # ------------Logistic Regression------------
+	# ------------Logistic Regression------------
 
-	# # Check GD, SGD, BGD
-	# logisticR_classifier = logistic_regression(learning_rate=0.5, max_iter=100)
+	# Check GD, SGD, BGD
+	logisticR_classifier = logistic_regression(learning_rate=0.5, max_iter=100)
 
-	# logisticR_classifier.fit_GD(train_X, train_y)
-	# print(logisticR_classifier.get_params())
-	# print(logisticR_classifier.score(train_X, train_y))
+	logisticR_classifier.fit_GD(train_X, train_y)
+	print(logisticR_classifier.get_params())
+	print(logisticR_classifier.score(train_X, train_y))
+	# plt.plot(logisticR_classifier.errors)
+	# plt.show()
 
-	# logisticR_classifier.fit_BGD(train_X, train_y, 1000)
-	# print(logisticR_classifier.get_params())
-	# print(logisticR_classifier.score(train_X, train_y))
+	logisticR_classifier.fit_BGD(train_X, train_y, 1000)
+	print(logisticR_classifier.get_params())
+	print(logisticR_classifier.score(train_X, train_y))
+	# plt.plot(logisticR_classifier.errors)
+	# plt.show()
 
-	# logisticR_classifier.fit_SGD(train_X, train_y)
-	# print(logisticR_classifier.get_params())
-	# print(logisticR_classifier.score(train_X, train_y))
+	logisticR_classifier.fit_SGD(train_X, train_y)
+	print(logisticR_classifier.get_params())
+	print(logisticR_classifier.score(train_X, train_y))
+	# plt.plot(logisticR_classifier.errors)
+	# plt.show()
 
-	# logisticR_classifier.fit_BGD(train_X, train_y, 1)
-	# print(logisticR_classifier.get_params())
-	# print(logisticR_classifier.score(train_X, train_y))
+	logisticR_classifier.fit_BGD(train_X, train_y, 1)
+	print(logisticR_classifier.get_params())
+	print(logisticR_classifier.score(train_X, train_y))
+	# plt.plot(logisticR_classifier.errors)
+	# plt.show()
 
-	# logisticR_classifier.fit_BGD(train_X, train_y, 10)
-	# print(logisticR_classifier.get_params())
-	# print(logisticR_classifier.score(train_X, train_y))
-	# print()
+	logisticR_classifier.fit_BGD(train_X, train_y, 10)
+	print(logisticR_classifier.get_params())
+	print(logisticR_classifier.score(train_X, train_y))
+	# plt.plot(logisticR_classifier.errors)
+	# plt.show()
+	print()
 
 	# Explore different hyper-parameters.
-	# ## YOUR CODE HERE
+	## YOUR CODE HERE
 
-	# ## END YOUR CODE
+	## END YOUR CODE
 
 	# Visualize the your 'best' model after training.
 	# visualize_result(train_X[:, 1:3], train_y, best_logisticR.get_params())
-	# ## YOUR CODE HERE
+	## YOUR CODE HERE
 
-	# ## END YOUR CODE
+	## END YOUR CODE
 
 	# Use the 'best' model above to do testing.
-	# ## YOUR CODE HERE
+	## YOUR CODE HERE
 
-	# ## END YOUR CODE
+	## END YOUR CODE
 
 if __name__ == '__main__':
 	main()
