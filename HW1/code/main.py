@@ -36,6 +36,7 @@ def visualize_features(X, y):
 	plt.scatter(fives[:,0], fives[:,1], c='b')
 	plt.scatter(ones[:,0], ones[:,1], c='y')
 	plt.savefig('train_features_img' + str(img_index) + '.png')
+	plt.gcf().clear()
 	img_index += 1
 
 	### END YOUR CODE
@@ -74,6 +75,7 @@ def visualize_result(X, y, W):
 	plt.scatter(fives[:,0], fives[:,1], c='b')
 	plt.scatter(ones[:,0], ones[:,1], c='y')
 	plt.savefig('test_features_img' + str(img_index) + '.png')
+	plt.gcf().clear()
 	img_index += 1
 
 	### END YOUR CODE
@@ -173,6 +175,7 @@ def main():
 	# Explore different hyper-parameters.
 	## YOUR CODE HERE
 
+	print('Tuning hyper-parameters...')
 	errors = []
 	for learning_rate in np.linspace(0,10,num=100):
 		logisticR_classifier = logistic_regression(learning_rate, max_iter=100)
@@ -181,6 +184,7 @@ def main():
 		errors.append(100-accuracy)
 	plt.plot(errors)
 	plt.savefig('variation_learning_rate_img' + str(img_index) + '.png')
+	plt.gcf().clear()
 	img_index += 1
 
 	errors = []
@@ -191,6 +195,7 @@ def main():
 		errors.append(100-accuracy)
 	plt.plot(errors)
 	plt.savefig('variation_max_iters_img' + str(img_index) + '.png')
+	plt.gcf().clear()
 	img_index += 1
 
 	best_logisticR = logistic_regression(learning_rate=0.5, max_iter=100)
