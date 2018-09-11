@@ -33,8 +33,11 @@ def visualize_features(X, y):
 	ones = np.array(ones)
 	fives = np.array(fives)
 
-	plt.scatter(fives[:,0], fives[:,1], c='b')
-	plt.scatter(ones[:,0], ones[:,1], c='y')
+	plt.xlabel('Feature 1')
+	plt.ylabel('Feature 2')
+	plt.scatter(fives[:,0], fives[:,1], c='b', label='Features of digit 5')
+	plt.scatter(ones[:,0], ones[:,1], c='y', label='Features of digit 1')
+	plt.legend()
 	plt.savefig('train_features_img' + str(img_index) + '.png')
 	plt.gcf().clear()
 	img_index += 1
@@ -62,7 +65,7 @@ def visualize_result(X, y, W):
 	x_vals = np.linspace(-1,0.2,num=2)
 	for i in x_vals:
 		boundary.append((slope*i) + intercept)
-	plt.plot(x_vals, boundary)
+	plt.plot(x_vals, boundary, c='r', label='Decision Boundary')
 	ones = []
 	fives = []
 	for i in range(y.shape[0]):
@@ -72,8 +75,11 @@ def visualize_result(X, y, W):
 			fives.append(X[i])
 	ones = np.array(ones)
 	fives = np.array(fives)
-	plt.scatter(fives[:,0], fives[:,1], c='b')
-	plt.scatter(ones[:,0], ones[:,1], c='y')
+	plt.xlabel('Feature 1')
+	plt.ylabel('Feature 2')
+	plt.scatter(fives[:,0], fives[:,1], c='b', label='Features of digit 5')
+	plt.scatter(ones[:,0], ones[:,1], c='y', label='Features of digit 1')
+	plt.legend()
 	plt.savefig('test_features_img' + str(img_index) + '.png')
 	plt.gcf().clear()
 	img_index += 1
@@ -182,6 +188,8 @@ def main():
 		logisticR_classifier.fit_BGD(train_X, train_y, 10)
 		accuracy = logisticR_classifier.score(valid_X, valid_y)
 		errors.append(100-accuracy)
+	plt.xlabel('Learning Rate')
+	plt.ylabel('Error')
 	plt.plot(errors)
 	plt.savefig('variation_learning_rate_img' + str(img_index) + '.png')
 	plt.gcf().clear()
@@ -194,6 +202,8 @@ def main():
 		accuracy = logisticR_classifier.score(valid_X, valid_y)
 		errors.append(100-accuracy)
 	plt.plot(errors)
+	plt.xlabel('Iterations')
+	plt.ylabel('Error')
 	plt.savefig('variation_max_iters_img' + str(img_index) + '.png')
 	plt.gcf().clear()
 	img_index += 1
