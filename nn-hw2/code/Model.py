@@ -103,6 +103,17 @@ class MNIST(object):
 				### YOUR CODE HERE
 				# Implement the validation process.
 				# Hint: read the testing process.
+
+				preds = []
+				for i in tqdm(range(x_valid.shape[0])):
+					feed_dict = {self.inputs: x_valid[i].reshape((1,-1)),
+								self.labels: y_valid[i]}
+					preds.append(self.sess.run(self.preds,
+									feed_dict=feed_dict))
+
+				preds = np.array(preds).reshape(y_valid.shape)
+				print('Valid accuracy: {:.4f}'.format(
+									np.sum(preds==y_valid)/y_valid.shape[0]))
 				
 				### END CODE HERE
 

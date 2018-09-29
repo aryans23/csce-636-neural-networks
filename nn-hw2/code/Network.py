@@ -54,6 +54,11 @@ class MLP(object):
 		# Note: for tensorflow APIs, only those in tf.layers and tf.nn
 		# are allowed to use.
 
+		W1 = tf.Variable(tf.random_normal([784, self.num_hid_units], stddev=0.03, dtype=tf.float64), name='W1')
+		b1 = tf.Variable(tf.random_normal([self.num_hid_units], dtype=tf.float64), name='b1')
+		h1 = tf.add(tf.matmul(inputs, W1), b1)
+		outputs = tf.nn.relu(h1)
+
 		### END CODE HERE
 
 		return outputs
@@ -73,6 +78,10 @@ class MLP(object):
 		### YOUR CODE HERE
 		# Note: for tensorflow APIs, only those in tf.layers and tf.nn
 		# are allowed to use.
+
+		W2 = tf.Variable(tf.random_normal([self.num_hid_units, self.num_classes], stddev=0.03, dtype=tf.float64), name='W2')
+		b2 = tf.Variable(tf.random_normal([self.num_classes], dtype=tf.float64), name='b2')
+		outputs = tf.nn.softmax(tf.add(tf.matmul(inputs, W2), b2))
 		
 		### END CODE HERE
 
