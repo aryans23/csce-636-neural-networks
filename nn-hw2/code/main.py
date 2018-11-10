@@ -27,14 +27,19 @@ def main(_):
 	# First run: use the train_new set and the valid set to choose
 	# hyperparameters, like num_hid_layers, num_hid_units, stopping epoch, etc.
 	# Report chosen hyperparameters in your hard-copy report.
-	model.train(x_train_new, y_train_new, x_valid, y_valid, 10)
+
+	for epoch in [1, 5, 10]:
+		model.train(x_train_new, y_train_new, x_valid, y_valid, epoch)
 
 	# Second run: with hyperparameters determined in the first run, re-train
 	# your model on the original train set.
-	
+
+	model.train(x_train_new, y_train_new, None, None, 9, False)
 
 	# Third run: after re-training, test your model on the test set.
 	# Report testing accuracy in your hard-copy report.
+
+	model.test(x_test, y_test, 9)
 	
 	### END CODE HERE
 

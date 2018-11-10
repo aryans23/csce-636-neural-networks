@@ -117,8 +117,8 @@ class MNIST(object):
 				
 				### END CODE HERE
 
-		if not validation:
-			self.save(self.saver, epoch)
+			if not validation:
+				self.save(self.saver, epoch)
 
 	def test(self, x_test, y_test, checkpoint_num):
 		print('###Test###')
