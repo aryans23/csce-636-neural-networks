@@ -5,6 +5,11 @@ import numpy as np
 """This script implements the functions for reading data.
 """
 
+def unpickle(file_path):
+	with open(file_path, mode='rb') as file:
+		data = pickle.load(file, encoding='bytes')
+	return data
+
 def load_data(data_dir):
 	"""Load the CIFAR-10 dataset.
 
@@ -25,7 +30,30 @@ def load_data(data_dir):
 
 	### YOUR CODE HERE
 
+	x_train_list = []
+	y_train_list = []
+	x_test_list = []
+	y_test_list = []
+
+	for filename in os.listdir(data_dir):
+		if filename.startswith("data"):
+			data = unpickle(data_dir+"/"+filename)
+			raw_images = data[b'data']
+			cls = np.array(data[b'labels'])
+			x_train_list.append(raw_images)
+			y_train_list.append(cls)
+		if filename.startswith("test"):
+			data = unpickle(data_dir+"/"+filename)
+			raw_images = data[b'data']
+			cls = np.array(data[b'labels'])
+			x_test_list.append(raw_images)
+			y_test_list.append(cls)
 	
+	x_train = np.array(x_train_list)
+	y_train = np.array(y_train_list)
+	x_test = np.array(x_test_list)
+	y_test = np.array(y_test_list)
+
 	### END CODE HERE
 
 	return x_train, y_train, x_test, y_test
