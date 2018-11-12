@@ -72,6 +72,11 @@ class ResNet(object):
 
 		### YOUR CODE HERE
 
+		inputs = tf.layers.batch_normalization(
+			inputs=inputs, momentum=0.997,
+			epsilon=1e-5, center=True, scale=True,
+			training=training, fused=True)
+		outputs = tf.nn.relu(inputs)
 
 		### END CODE HERE
 
@@ -91,7 +96,9 @@ class ResNet(object):
 		
 		### YOUR CODE HERE
 		# initial conv1
-
+		outputs = tf.layers.conv2d(
+			inputs=inputs, filters=self.first_num_filters,
+			kernel_size=3, strides=1)
 
 		### END CODE HERE
 
@@ -100,7 +107,7 @@ class ResNet(object):
 		# for both the shortcut and non-shortcut paths as part of the first
 		# block's projection.
 		if self.resnet_version == 1:
-			self._batch_norm_relu(outputs, training)
+			outputs = self._batch_norm_relu(outputs, training)
 
 		return outputs
 
@@ -123,6 +130,7 @@ class ResNet(object):
 
 		### YOUR CODE HERE
 
+		outputs = tf.layers.dense(inputs=inputs, units=self.num_classes)
 
 		### END CODE HERE
 
@@ -150,12 +158,20 @@ class ResNet(object):
 		def projection_shortcut(inputs):
 			### YOUR CODE HERE
 
+			inputs = tf.layers.conv2d(
+				inputs=inputs, filters=filters,
+				kernel_size=1, strides=strides, 
+				padding=('SAME' if strides == 1 else 'VALID'))
 
 			### END CODE HERE
 
 		### YOUR CODE HERE
+		
 		# Only the first block per stack_layer uses projection_shortcut
+		outputs = block_fn(inputs, filters, training, projection_shortcut, strides)
 
+		for _ in range(1,3):
+			outputs = block_fn(inputs, filters, training, None, 1)
 
 		### END CODE HERE
 
@@ -184,11 +200,32 @@ class ResNet(object):
 		if projection_shortcut is not None:
 			### YOUR CODE HERE
 
+			shortcut = projection_shortcut(inputs)
+			shortcut = tf.layers.batch_normalization(
+				inputs=shortcut, momentum=0.997,
+				epsilon=1e-5, center=True, scale=True,
+				training=training, fused=True)
 
 			### END CODE HERE
 
 		### YOUR CODE HERE
 
+		inputs = tf.layers.conv2d(
+			inputs=inputs, filters=filters,
+			kernel_size=3, strides=strides, 
+			padding=('SAME' if strides == 1 else 'VALID'))
+		inputs = self._batch_norm_relu(inputs, training)
+
+		inputs = tf.layers.conv2d(
+			inputs=inputs, filters=filters,
+			kernel_size=3, strides=1, 
+			padding=('SAME' if strides == 1 else 'VALID'))
+		inputs = tf.layers.batch_normalization(
+			inputs=inputs, momentum=0.997,
+			epsilon=1e-5, center=True, scale=True,
+			training=training, fused=True)
+		inputs = inputs + shortcut
+		outputs = tf.nn.relu(inputs)
 
 		### END CODE HERE
 
@@ -214,6 +251,30 @@ class ResNet(object):
 
 		### YOUR CODE HERE
 
+		shortcut = inputs
+		inputs = self._batch_norm_relu(inputs, training)
+
+		if projection_shortcut is not None:
+			shortcut = projection_shortcut(inputs)
+
+		inputs = tf.layers.conv2d(
+			inputs=inputs, filters=filters,
+			kernel_size=1, strides=1, 
+			padding=('SAME' if strides == 1 else 'VALID'))
+
+		inputs = self._batch_norm_relu(inputs, training)
+		inputs = tf.layers.conv2d(
+			inputs=inputs, filters=filters,
+			kernel_size=3, strides=strides, 
+			padding=('SAME' if strides == 1 else 'VALID'))
+
+		inputs = self._batch_norm_relu(inputs, training)
+		inputs = tf.layers.conv2d(
+			inputs=inputs, filters=4*filters,
+			kernel_size=1, strides=1, 
+			padding=('SAME' if strides == 1 else 'VALID'))
+
+		outputs = inputs + shortcut
 
 		### END CODE HERE
 

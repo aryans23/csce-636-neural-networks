@@ -80,6 +80,7 @@ class Cifar(object):
 		# Determine how many batches in an epoch
 		num_samples = x_train.shape[0]
 		num_batches = int(num_samples / self.conf.batch_size)
+		self.learning_rate = 1
 		
 		print('---Run...')
 		for epoch in range(1, max_epoch+1):
@@ -93,7 +94,7 @@ class Cifar(object):
 			### YOUR CODE HERE
 			# Set the learning rate for this epoch
 			# Usage example: divide the initial learning rate by 10 after several epochs
-
+			self.learning_rate = self.learning_rate/10
 
 			### END CODE HERE
 
@@ -139,6 +140,7 @@ class Cifar(object):
 			for i in tqdm(range(x.shape[0])):
 				### YOUR CODE HERE
 
+				pass
 				
 				### END CODE HERE
 

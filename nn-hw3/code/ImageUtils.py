@@ -40,14 +40,14 @@ def preprocess_image(image, training):
 	if training:
 		### YOUR CODE HERE
 		# Resize the image to add four extra pixels on each side.
-		# image = tf.image.resize_image_with_crop_or_pad(image, 32 + 8, 32 + 8)
+		image = tf.image.resize_image_with_crop_or_pad(image, 32 + 8, 32 + 8)
 		
 
 		### END CODE HERE
 
 		### YOUR CODE HERE
 		# Randomly crop a [32, 32] section of the image.
-		# image = tf.random_crop(image, [32, 32, 3])
+		image = tf.random_crop(image, [32, 32, 3])
 		# HINT: randomly generate the upper left point of the image
 		
 
@@ -55,14 +55,14 @@ def preprocess_image(image, training):
 
 		### YOUR CODE HERE
 		# Randomly flip the image horizontally.
-		# image = tf.image.random_flip_left_right(image)
+		image = tf.image.random_flip_left_right(image)
 		
 
 		### END CODE HERE
 
 	### YOUR CODE HERE
 	# Subtract off the mean and divide by the variance of the pixels.
-	# image = tf.image.per_image_standardization(image)
+	image = tf.image.per_image_standardization(image)
 	
 	
 	### END CODE HERE
