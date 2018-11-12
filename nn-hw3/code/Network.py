@@ -73,9 +73,7 @@ class ResNet(object):
 		### YOUR CODE HERE
 
 		inputs = tf.layers.batch_normalization(
-			inputs=inputs, momentum=0.997,
-			epsilon=1e-5, center=True, scale=True,
-			training=training, fused=True)
+			inputs=inputs, training=training, axis=3)
 		outputs = tf.nn.relu(inputs)
 
 		### END CODE HERE
@@ -157,12 +155,10 @@ class ResNet(object):
 
 		def projection_shortcut(inputs):
 			### YOUR CODE HERE
-
-			inputs = tf.layers.conv2d(
+			return tf.layers.conv2d(
 				inputs=inputs, filters=filters,
 				kernel_size=1, strides=strides, 
 				padding=('SAME' if strides == 1 else 'VALID'))
-
 			### END CODE HERE
 
 		### YOUR CODE HERE
@@ -194,7 +190,7 @@ class ResNet(object):
 		Returns:
 			outputs: The output tensor of the block layer.
 		"""
-
+		
 		shortcut = inputs
 
 		if projection_shortcut is not None:
@@ -202,9 +198,7 @@ class ResNet(object):
 
 			shortcut = projection_shortcut(inputs)
 			shortcut = tf.layers.batch_normalization(
-				inputs=shortcut, momentum=0.997,
-				epsilon=1e-5, center=True, scale=True,
-				training=training, fused=True)
+				inputs=shortcut, training=training, axis=3)
 
 			### END CODE HERE
 
@@ -221,9 +215,7 @@ class ResNet(object):
 			kernel_size=3, strides=1, 
 			padding=('SAME' if strides == 1 else 'VALID'))
 		inputs = tf.layers.batch_normalization(
-			inputs=inputs, momentum=0.997,
-			epsilon=1e-5, center=True, scale=True,
-			training=training, fused=True)
+			inputs=inputs, training=training, axis=3)
 		inputs = inputs + shortcut
 		outputs = tf.nn.relu(inputs)
 

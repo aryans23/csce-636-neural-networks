@@ -40,11 +40,13 @@ class Cifar(object):
 						if 'kernel' in v.name])
 
 			### YOUR CODE HERE
+			
 			# cross entropy
-
+			cross_entropy = tf.losses.sparse_softmax_cross_entropy(
+				logits=logits, labels=self.labels)
 
 			# final loss function
-
+			self.losses = l2_loss + cross_entropy
 
 			### END CODE HERE
 
@@ -53,9 +55,7 @@ class Cifar(object):
 							learning_rate=self.learning_rate, momentum=0.9)
 
 			### YOUR CODE HERE
-			# train_op
-
-
+			self.train_op = optimizer.minimize(self.losses)
 			### END CODE HERE
 
 			print('---Setup the Saver for saving models...')
@@ -80,7 +80,6 @@ class Cifar(object):
 		# Determine how many batches in an epoch
 		num_samples = x_train.shape[0]
 		num_batches = int(num_samples / self.conf.batch_size)
-		self.learning_rate = 1
 		
 		print('---Run...')
 		for epoch in range(1, max_epoch+1):
@@ -94,7 +93,9 @@ class Cifar(object):
 			### YOUR CODE HERE
 			# Set the learning rate for this epoch
 			# Usage example: divide the initial learning rate by 10 after several epochs
-			self.learning_rate = self.learning_rate/10
+			learning_rate = 1
+			if (epoch > 0.8*max_epoch):
+				learning_rate = learning_rate/10
 
 			### END CODE HERE
 
@@ -104,6 +105,13 @@ class Cifar(object):
 				# Construct the current batch.
 				# Don't forget to use "parse_record" to perform data preprocessing.		
 
+				x_batch = curr_x_train\
+						[self.conf.batch_size*i:self.conf.batch_size*(i+1)]
+				y_batch = curr_y_train\
+						[self.conf.batch_size*i:self.conf.batch_size*(i+1)]
+				for i in range(x_batch.shape[0]):
+					x_batch[i] = parse_record(x_batch[i], True)
+					y_batch[i] = parse_record(y_batch[i], True)
 
 				### END CODE HERE
 
@@ -140,7 +148,8 @@ class Cifar(object):
 			for i in tqdm(range(x.shape[0])):
 				### YOUR CODE HERE
 
-				pass
+				feed_dict = {self.inputs: x_test[i].reshape((1,-1)), self.labels: y_test[i]}
+				preds.append(self.sess.run(self.preds,feed_dict=feed_dict))
 				
 				### END CODE HERE
 
