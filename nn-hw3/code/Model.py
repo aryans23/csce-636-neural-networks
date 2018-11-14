@@ -93,8 +93,8 @@ class Cifar(object):
 			### YOUR CODE HERE
 			# Set the learning rate for this epoch
 			# Usage example: divide the initial learning rate by 10 after several epochs
-			learning_rate = 1
-			if (epoch > 0.8*max_epoch):
+			learning_rate = 0.1
+			if (epoch > 0.7*max_epoch):
 				learning_rate = learning_rate/10
 
 			### END CODE HERE
@@ -105,13 +105,16 @@ class Cifar(object):
 				# Construct the current batch.
 				# Don't forget to use "parse_record" to perform data preprocessing.		
 
-				x_batch = curr_x_train\
+				x_batch_unparsed = curr_x_train\
 						[self.conf.batch_size*i:self.conf.batch_size*(i+1)]
+				x_batch_list = []
+				for i in range(x_batch_unparsed.shape[0]):
+					res = parse_record(x_batch_unparsed[i], True)
+					x_batch_list.append(res)
+
+				x_batch = np.array(x_batch_list)
 				y_batch = curr_y_train\
 						[self.conf.batch_size*i:self.conf.batch_size*(i+1)]
-				for i in range(x_batch.shape[0]):
-					x_batch[i] = parse_record(x_batch[i], True)
-					y_batch[i] = parse_record(y_batch[i], True)
 
 				### END CODE HERE
 
@@ -120,7 +123,7 @@ class Cifar(object):
 							self.labels: y_batch,
 							self.learning_rate: learning_rate}
 				loss, _ = self.sess.run(
-							[self.losses, self.train_op], feed_dict=feed_dict)
+					[self.losses, self.train_op],feed_dict=feed_dict)
 
 				print('Batch {:d}/{:d} Loss {:.6f}'.format(i, num_batches, loss),
 						end='\r', flush=True)

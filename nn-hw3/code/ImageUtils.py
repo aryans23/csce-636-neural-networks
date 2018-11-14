@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 
 """This script implements the functions for data augmentation
 and preprocessing.
@@ -19,7 +20,7 @@ def parse_record(record, training):
 	depth_major = record.reshape((3, 32, 32))
 
 	# Convert from [depth, height, width] to [height, width, depth]
-	# image = tf.transpose(depth_major, [1, 2, 0])
+	# image = tf.cast(tf.transpose(depth_major, [1, 2, 0]), tf.float32)
 	image = np.transpose(depth_major, [1, 2, 0])
 
 	image = preprocess_image(image, training)
@@ -40,30 +41,34 @@ def preprocess_image(image, training):
 	if training:
 		### YOUR CODE HERE
 		# Resize the image to add four extra pixels on each side.
-		image = tf.image.resize_image_with_crop_or_pad(image, 32 + 8, 32 + 8)
-		
+		# image = tf.image.resize_image_with_crop_or_pad(image, 32 + 8, 32 + 8)
+		image = np.pad(image, pad_width=((4,4),(4,4),(0,0)), mode='constant')
 
 		### END CODE HERE
 
 		### YOUR CODE HERE
 		# Randomly crop a [32, 32] section of the image.
-		image = tf.random_crop(image, [32, 32, 3])
+		# image = tf.random_crop(image, [32, 32, 3])
 		# HINT: randomly generate the upper left point of the image
-		
+		x = np.random.randint(0, image.shape[0] - 32)
+		y = np.random.randint(0, image.shape[1] - 32)
+		image = image[x:x+32, y:y+32, :]
 
 		### END CODE HERE
 
 		### YOUR CODE HERE
 		# Randomly flip the image horizontally.
-		image = tf.image.random_flip_left_right(image)
-		
+		# image = tf.image.random_flip_left_right(image)
+		if (np.random.random() >= 0.5):
+			image = np.fliplr(image)
 
 		### END CODE HERE
 
 	### YOUR CODE HERE
 	# Subtract off the mean and divide by the variance of the pixels.
-	image = tf.image.per_image_standardization(image)
-	
+	# image = tf.image.per_image_standardization(image)
+	adjusted_std = max(np.std(image), 1.0/np.sqrt(image.size))
+	image = (image-np.mean(image))/adjusted_std
 	
 	### END CODE HERE
 

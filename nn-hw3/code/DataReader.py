@@ -38,16 +38,16 @@ def load_data(data_dir):
 	for filename in os.listdir(data_dir):
 		if filename.startswith("data"):
 			data = unpickle(data_dir+"/"+filename)
-			raw_images = data[b'data']
-			cls = np.array(data[b'labels'])
-			x_train_list.append(raw_images)
-			y_train_list.append(cls)
+			raw_images = list(data[b'data'])
+			cls = data[b'labels']
+			x_train_list = x_train_list + raw_images
+			y_train_list = y_train_list + cls
 		if filename.startswith("test"):
 			data = unpickle(data_dir+"/"+filename)
-			raw_images = data[b'data']
-			cls = np.array(data[b'labels'])
-			x_test_list.append(raw_images)
-			y_test_list.append(cls)
+			raw_images = list(data[b'data'])
+			cls = data[b'labels']
+			x_test_list = x_test_list + raw_images
+			y_test_list = y_test_list + cls
 	
 	x_train = np.array(x_train_list)
 	y_train = np.array(y_train_list)

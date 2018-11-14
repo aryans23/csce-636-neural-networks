@@ -67,6 +67,22 @@ class ResNet(object):
 	################################################################################
 	# Blocks building the network
 	################################################################################
+	def _fixed_padding(self, inputs, kernel_size):
+		pad_total = kernel_size - 1
+		pad_beg = pad_total // 2
+		pad_end = pad_total - pad_beg
+		padded_inputs = tf.pad(inputs, [[0, 0], [pad_beg, pad_end],
+			                                [pad_beg, pad_end], [0, 0]])
+		return padded_inputs
+
+	def _conv(self, inputs, filters, kernel_size, strides):
+		if strides > 1:
+			inputs = self._fixed_padding(inputs, kernel_size)
+		return tf.layers.conv2d(
+			inputs=inputs, filters=filters,
+			kernel_size=kernel_size, strides=strides,
+			padding=('SAME' if strides == 1 else 'VALID'))
+
 	def _batch_norm_relu(self, inputs, training):
 		"""Perform batch normalization then relu."""
 
@@ -155,10 +171,7 @@ class ResNet(object):
 
 		def projection_shortcut(inputs):
 			### YOUR CODE HERE
-			return tf.layers.conv2d(
-				inputs=inputs, filters=filters,
-				kernel_size=1, strides=strides, 
-				padding=('SAME' if strides == 1 else 'VALID'))
+			return self._conv(inputs, filters_out, 1, strides)
 			### END CODE HERE
 
 		### YOUR CODE HERE
@@ -195,28 +208,20 @@ class ResNet(object):
 
 		if projection_shortcut is not None:
 			### YOUR CODE HERE
-
 			shortcut = projection_shortcut(inputs)
 			shortcut = tf.layers.batch_normalization(
 				inputs=shortcut, training=training, axis=3)
-
 			### END CODE HERE
 
-		### YOUR CODE HERE
 
-		inputs = tf.layers.conv2d(
-			inputs=inputs, filters=filters,
-			kernel_size=3, strides=strides, 
-			padding=('SAME' if strides == 1 else 'VALID'))
+		### YOUR CODE HERE
+		inputs = self._conv(inputs, filters, 3, strides)
 		inputs = self._batch_norm_relu(inputs, training)
 
-		inputs = tf.layers.conv2d(
-			inputs=inputs, filters=filters,
-			kernel_size=3, strides=1, 
-			padding=('SAME' if strides == 1 else 'VALID'))
+		inputs = self._conv(inputs, filters, 3, 1)
 		inputs = tf.layers.batch_normalization(
 			inputs=inputs, training=training, axis=3)
-		inputs = inputs + shortcut
+		inputs = tf.concat((inputs,shortcut), axis=3)
 		outputs = tf.nn.relu(inputs)
 
 		### END CODE HERE
@@ -249,22 +254,25 @@ class ResNet(object):
 		if projection_shortcut is not None:
 			shortcut = projection_shortcut(inputs)
 
-		inputs = tf.layers.conv2d(
-			inputs=inputs, filters=filters,
-			kernel_size=1, strides=1, 
-			padding=('SAME' if strides == 1 else 'VALID'))
+		# inputs = tf.layers.conv2d(
+		# 	inputs=inputs, filters=filters,
+		# 	kernel_size=1, strides=1, 
+		# 	padding=('SAME' if strides == 1 else 'VALID'))
+		inputs = self._conv(inputs, filters, 1, 1)
 
 		inputs = self._batch_norm_relu(inputs, training)
-		inputs = tf.layers.conv2d(
-			inputs=inputs, filters=filters,
-			kernel_size=3, strides=strides, 
-			padding=('SAME' if strides == 1 else 'VALID'))
+		# inputs = tf.layers.conv2d(
+		# 	inputs=inputs, filters=filters,
+		# 	kernel_size=3, strides=strides, 
+		# 	padding=('SAME' if strides == 1 else 'VALID'))
+		inputs = self._conv(inputs, filters, 3, strides)
 
 		inputs = self._batch_norm_relu(inputs, training)
-		inputs = tf.layers.conv2d(
-			inputs=inputs, filters=4*filters,
-			kernel_size=1, strides=1, 
-			padding=('SAME' if strides == 1 else 'VALID'))
+		# inputs = tf.layers.conv2d(
+		# 	inputs=inputs, filters=4*filters,
+		# 	kernel_size=1, strides=1, 
+		# 	padding=('SAME' if strides == 1 else 'VALID'))
+		inputs = self._conv(inputs, filters, 1, 1)
 
 		outputs = inputs + shortcut
 
